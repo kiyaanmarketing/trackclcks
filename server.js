@@ -605,6 +605,53 @@ app.get('/api/remarketing.js', (req, res) => {
 
 
 
+// Site Configs API
+app.get('/api/site-configs', async (req, res) => {
+  const db = getDB();
+  try {
+    const configs = await db.collection('siteConfigs').find({}).toArray();
+    const configObj = {};
+    configs.forEach(c => {
+      configObj[c.hostname] = { always: c.always, cartExtra: c.cartExtra };
+    });
+    res.json(configObj);
+  } catch (error) {
+    console.error('Error fetching site configs:', error);
+    res.status(500).json({ error: 'Failed to fetch configs' });
+  }
+});
+
+app.post('/api/site-configs', async (req, res) => {
+  const { hostname, always, cartExtra } = req.body;
+  if (!hostname) {
+    return res.status(400).json({ error: 'Hostname required' });
+  }
+  const db = getDB();
+  try {
+    await db.collection('siteConfigs').updateOne(
+      { hostname },
+      { $set: { hostname, always: always || false, cartExtra: cartExtra || false } },
+      { upsert: true }
+    );
+    res.json({ message: 'Config updated' });
+  } catch (error) {
+    console.error('Error updating config:', error);
+    res.status(500).json({ error: 'Failed to update config' });
+  }
+});
+
+app.delete('/api/site-configs/:hostname', async (req, res) => {
+  const { hostname } = req.params;
+  const db = getDB();
+  try {
+    await db.collection('siteConfigs').deleteOne({ hostname });
+    res.json({ message: 'Config deleted' });
+  } catch (error) {
+    console.error('Error deleting config:', error);
+    res.status(500).json({ error: 'Failed to delete config' });
+  }
+});
+
 app.use('/api', trackingRoutes);
 
 app.get('/', (req, res) => {
@@ -615,6 +662,11 @@ app.get('/', (req, res) => {
 // app.get('/manage-tracking-urls', (req, res) => {
 //   res.sendFile(path.join(__dirname, 'public', 'manageTracking.html'));
 // });
+
+// Serve the manage site configs page
+app.get('/manage-configs', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'manage-configs.html'));
+});
 
 
 connectDB()
