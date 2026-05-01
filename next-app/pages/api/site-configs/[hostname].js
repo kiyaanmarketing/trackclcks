@@ -1,4 +1,4 @@
-const { connectDB, getDB } = require('../../../../lib/mongo-config');
+const { connectDB, getDB } = require('../../../lib/mongo-config');
 
 export default async function handler(req, res) {
   try {
