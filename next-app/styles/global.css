@@ -1,0 +1,21 @@
+:root {
+  --primary-color: #28a745;
+  --primary-hover: #218838;
+  --secondary-color: #007bff;
+  --secondary-hover: #0056b3;
+  --danger-color: #dc3545;
+  --danger-hover: #c82333;
+  --status-active: #28a745;
+  --status-inactive: #6c757d;
+  --text-color: #343a40;
+  --background-color: #f8f9fa;
+  --card-background: #ffffff;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
