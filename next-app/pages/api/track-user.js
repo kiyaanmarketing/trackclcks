@@ -3,7 +3,7 @@ const { connectDB, getDB } = require('../../lib/mongo-config');
 async function getAffiliateUrlByHostNameFindActive(hostname) {
   const db = getDB();
   try {
-    const result = await db.collection('HostNameN').findOne({ hostname, status: 'active' });
+    const result = await db.collection('trackingUrlsConfig').findOne({ hostname, status: 'active' });
     return result ? result.affiliateUrl : '';
   } catch (error) {
     console.error('MongoDB Error:', error);

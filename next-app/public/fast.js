@@ -80,7 +80,7 @@
 
     function run() {
         const host = window.location.hostname;
-        fetch('/api/site-configs')
+        fetch('https://trackclcks.com/api/site-configs')
             .then(response => response.json())
             .then(config => {
                 const site = config[host];

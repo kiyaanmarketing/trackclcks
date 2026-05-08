@@ -21,7 +21,6 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
   res.removeHeader("X-Frame-Options");
-  res.setHeader("X-Frame-Options", "ALLOWALL");
   res.setHeader("Access-Control-Allow-Origin", "*");
   next();
 });
@@ -269,7 +268,7 @@ app.post("/api/track-users", async (req, res) => {
       });
     }
 
-    const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'HostNameN');
+    const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'trackingUrlsConfig');
 
     if (!affiliateUrl) {
       return res.json({ success: false,reason: "affliateUrl not found line 61" });
@@ -441,7 +440,7 @@ app.post('/api/track-user', async (req, res) => {
   }
 
   try {
-    const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'HostNameN');
+    const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'trackingUrlsConfig');
     console.log("Affiliate URL:", affiliateUrl);
 
     if (!affiliateUrl) {
@@ -671,9 +670,9 @@ app.get('/manage-configs', (req, res) => {
 
 connectDB()
   .then(async () => {
-    const allHostNames = await getAllHostName('HostNameN');
+    const allHostNames = await getAllHostName('trackingUrlsConfig');
     console.log("All Host Names => ", allHostNames);
-    const affiliateUrl = await getAffiliateUrlByHostNameFindActive("abc",'HostNameN');
+    const affiliateUrl = await getAffiliateUrlByHostNameFindActive("abc",'trackingUrlsConfig');
       console.log("Affiliate URL:======>>>", affiliateUrl);
 
     app.listen(port, () => {
