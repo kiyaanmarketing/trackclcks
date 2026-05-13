@@ -499,6 +499,49 @@ app.get('/api/site-configs', async (req, res) => {
   }
 });
 
+app.get('/api/site-config', async (req, res) => {
+
+  const hostname = req.query.host;
+
+  if (!hostname) {
+
+    return res.status(400).json({
+      error: 'Hostname required'
+    });
+  }
+
+  const db = getDB();
+
+  try {
+
+    const config =
+      await db.collection('siteConfigs')
+      .findOne({ hostname });
+
+    if (!config) {
+
+      return res.json({});
+    }
+
+    return res.json({
+      always: !!config.always,
+      cartExtra: !!config.cartExtra
+    });
+
+  } catch (error) {
+
+    console.error(
+      'Error fetching config:',
+      error
+    );
+
+    return res.status(500).json({
+      error: 'Failed to fetch config'
+    });
+  }
+});
+
+
 app.post('/api/site-configs', async (req, res) => {
   const { hostname, always, cartExtra } = req.body;
   if (!hostname) {

