@@ -363,25 +363,18 @@ app.post('/api/track-user', async (req, res) => {
 });
 
 // ✅ CHANGE 3: Naya proxy-iframe endpoint — affiliate URL fetch karke headers strip karo
+// NAYA — yeh daalo
 app.get('/api/proxy-iframe', async (req, res) => {
-  const { target } = req.query;
-
-  if (!target) {
+  
+  const rawQuery = req.url.split('?target=')[1];
+  
+  if (!rawQuery) {
     return res.status(400).send('Target URL required');
   }
 
+  const decodedUrl = decodeURIComponent(rawQuery);
+
   try {
-    const decodedUrl = decodeURIComponent(target);
-
-    // ✅ Security: Sirf allowed affiliate domains allow karo
-    const allowedDomains = [
-      'gotrackier.com',
-      'nomadz.gotrackier.com',
-      'trackier.com',
-      'dicountshop.com',
-      // Apne aur affiliate domains yahan add karo
-    ];
-
     let urlObj;
     try {
       urlObj = new URL(decodedUrl);
@@ -389,25 +382,28 @@ app.get('/api/proxy-iframe', async (req, res) => {
       return res.status(400).send('Invalid URL');
     }
 
+    const allowedDomains = [
+      'gotrackier.com',
+      'nomadz.gotrackier.com',
+      'trackier.com',
+      'dicountshop.com',
+    ];
+
     const isAllowed = allowedDomains.some(d => urlObj.hostname.includes(d));
     if (!isAllowed) {
-      console.warn(`🚫 Blocked proxy attempt for domain: ${urlObj.hostname}`);
+      console.warn(`🚫 Blocked: ${urlObj.hostname}`);
       return res.status(403).send('Domain not allowed');
     }
-
-    console.log(`✅ Proxying URL: ${decodedUrl}`);
 
     const fetchRes = await fetch(decodedUrl, {
       method: 'GET',
       headers: {
         'User-Agent': req.headers['user-agent'] || 'Mozilla/5.0',
         'Accept': 'text/html,application/xhtml+xml,*/*',
-        'Accept-Language': 'en-US,en;q=0.9',
       },
       redirect: 'follow'
     });
 
-    // ✅ Affiliate server ke blocking headers strip karo
     res.removeHeader('X-Frame-Options');
     res.removeHeader('Content-Security-Policy');
     res.setHeader('Access-Control-Allow-Origin', '*');
