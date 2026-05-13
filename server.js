@@ -15,7 +15,7 @@ const port = process.env.PORT || 2126;
 
 app.use(corsMiddleware);
 app.use(bodyParser.json());
-app.use(cors());
+
 
 const jsonFilePath = path.join(__dirname, 'trackingUrls.json');
 
@@ -23,9 +23,11 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // ✅ CHANGE 1: X-Frame-Options globally remove karo (aapke server ke liye)
 app.use((req, res, next) => {
-  res.removeHeader("X-Frame-Options");
-  res.removeHeader("Content-Security-Policy");
-  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "*"
+  );
+
   next();
 });
 
@@ -332,92 +334,60 @@ app.get("/clear-session", (req, res) => {
 
 // ✅ CHANGE 2: /api/track-user — proxied URL return karo
 app.post('/api/track-user', async (req, res) => {
-  const { url, referrer, unique_id, origin } = req.body;
-  console.log("Request Data:", req.body);
 
-  if (!url || !unique_id) {
-    console.log("Missing Data Error:", { url, unique_id });
-    return res.status(400).json({ success: false, error: 'Invalid request data' });
+  const {
+    url,
+    referrer,
+    unique_id,
+    origin
+  } = req.body;
+
+  if (!url || !unique_id || !origin) {
+
+    return res.status(400).json({
+      success: false,
+      error: 'Invalid request'
+    });
   }
 
   try {
-    const affiliateUrl = await getAffiliateUrlByHostNameFindActive(origin, 'trackingUrlsConfig');
-    console.log("Affiliate URL:", affiliateUrl);
+
+    const affiliateUrl =
+      await getAffiliateUrlByHostNameFindActive(
+        origin,
+        'trackingUrlsConfig'
+      );
 
     if (!affiliateUrl) {
-      console.log("No affiliate URL found, using fallback");
-      return res.json({ success: false, affiliate_url: "" });
+
+      return res.json({
+        success: false
+      });
     }
 
-    // ✅ Affiliate URL ko proxy se wrap karo taaki X-Frame-Options bypass ho
-    const urlWithId = affiliateUrl + `&unique_id=${unique_id}`;
-    const proxiedUrl = `https://trackclcks.com/api/proxy-iframe?target=${encodeURIComponent(urlWithId)}`;
+    // Return direct URL
+    // No proxy iframe needed
 
-    console.log("Response Data:", { success: true, affiliate_url: proxiedUrl });
-    res.json({ success: true, affiliate_url: proxiedUrl });
-
-  } catch (error) {
-    console.error("Error in API:", error.message);
-    res.status(500).json({ success: false, error: 'Server error' });
-  }
-});
-
-// ✅ CHANGE 3: Naya proxy-iframe endpoint — affiliate URL fetch karke headers strip karo
-// NAYA — yeh daalo
-app.get('/api/proxy-iframe', async (req, res) => {
-  
-  const rawQuery = req.url.split('?target=')[1];
-  
-  if (!rawQuery) {
-    return res.status(400).send('Target URL required');
-  }
-
-  const decodedUrl = decodeURIComponent(rawQuery);
-
-  try {
-    let urlObj;
-    try {
-      urlObj = new URL(decodedUrl);
-    } catch (e) {
-      return res.status(400).send('Invalid URL');
-    }
-
-    const allowedDomains = [
-      'gotrackier.com',
-      'nomadz.gotrackier.com',
-      'trackier.com',
-      'dicountshop.com',
-    ];
-
-    const isAllowed = allowedDomains.some(d => urlObj.hostname.includes(d));
-    if (!isAllowed) {
-      console.warn(`🚫 Blocked: ${urlObj.hostname}`);
-      return res.status(403).send('Domain not allowed');
-    }
-
-    const fetchRes = await fetch(decodedUrl, {
-      method: 'GET',
-      headers: {
-        'User-Agent': req.headers['user-agent'] || 'Mozilla/5.0',
-        'Accept': 'text/html,application/xhtml+xml,*/*',
-      },
-      redirect: 'follow'
+    return res.json({
+      success: true,
+      affiliate_url: affiliateUrl
     });
 
-    res.removeHeader('X-Frame-Options');
-    res.removeHeader('Content-Security-Policy');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Content-Type', fetchRes.headers.get('content-type') || 'text/html');
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-
-    const body = await fetchRes.text();
-    res.status(200).send(body);
-
   } catch (error) {
-    console.error('Proxy iframe error:', error);
-    res.status(500).send('Proxy error');
+
+    console.error(
+      "Track user error:",
+      error
+    );
+
+    return res.status(500).json({
+      success: false
+    });
   }
 });
+// ✅ CHANGE 3: Naya proxy-iframe endpoint — affiliate URL fetch karke headers strip karo
+// NAYA — yeh daalo
+
 
 app.get('/api/fallback-pixel', (req, res) => {
   try {
