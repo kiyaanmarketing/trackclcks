@@ -333,8 +333,60 @@ app.get("/clear-session", (req, res) => {
 });
 
 // ✅ CHANGE 2: /api/track-user — proxied URL return karo
-app.post('/api/track-user', async (req, res) => {
+// app.post('/api/track-user', async (req, res) => {
 
+//   const {
+//     url,
+//     referrer,
+//     unique_id,
+//     origin
+//   } = req.body;
+
+//   if (!url || !unique_id || !origin) {
+
+//     return res.status(400).json({
+//       success: false,
+//       error: 'Invalid request'
+//     });
+//   }
+
+//   try {
+
+//     const affiliateUrl =
+//       await getAffiliateUrlByHostNameFindActive(
+//         origin,
+//         'trackingUrlsConfig'
+//       );
+
+//     if (!affiliateUrl) {
+
+//       return res.json({
+//         success: false
+//       });
+//     }
+
+//     // Return direct URL
+//     // No proxy iframe needed
+
+//     return res.json({
+//       success: true,
+//       affiliate_url: affiliateUrl
+//     });
+
+//   } catch (error) {
+
+//     console.error(
+//       "Track user error:",
+//       error
+//     );
+
+//     return res.status(500).json({
+//       success: false
+//     });
+//   }
+// });
+
+app.post('/api/track-user', async (req, res) => {
   const {
     url,
     referrer,
@@ -343,7 +395,6 @@ app.post('/api/track-user', async (req, res) => {
   } = req.body;
 
   if (!url || !unique_id || !origin) {
-
     return res.status(400).json({
       success: false,
       error: 'Invalid request'
@@ -351,40 +402,40 @@ app.post('/api/track-user', async (req, res) => {
   }
 
   try {
-
-    const affiliateUrl =
-      await getAffiliateUrlByHostNameFindActive(
-        origin,
-        'trackingUrlsConfig'
-      );
+    const affiliateUrl = await getAffiliateUrlByHostNameFindActive(
+      origin,
+      'trackingUrlsConfig'
+    );
 
     if (!affiliateUrl) {
-
-      return res.json({
-        success: false
-      });
+      return res.json({ success: false });
     }
 
-    // Return direct URL
-    // No proxy iframe needed
+    // ✅ FIX: {replace_it} ko unique_id se replace karo
+    // Koi bhi affiliate URL ho — sab mein kaam karega
+    const finalUrl = affiliateUrl
+      .replace(/{replace_it}/g,        unique_id)   // normal format
+      .replace(/%7Breplace_it%7D/g,    unique_id)   // URL encoded format
+      .replace(/{click_id}/g,          unique_id)   // agar koi aur placeholder ho
+      .replace(/{aff_click_id}/g,      unique_id)   // agar koi aur placeholder ho
+      .replace(/{sub_aff_id}/g,        unique_id)   // agar koi aur placeholder ho
+      .replace(/{unique_id}/g,         unique_id);  // agar koi aur placeholder ho
+
+    console.log('Original URL:', affiliateUrl);
+    console.log('Final URL:',    finalUrl);
 
     return res.json({
       success: true,
-      affiliate_url: affiliateUrl
+      affiliate_url: finalUrl
     });
 
   } catch (error) {
-
-    console.error(
-      "Track user error:",
-      error
-    );
-
-    return res.status(500).json({
-      success: false
-    });
+    console.error("Track user error:", error);
+    return res.status(500).json({ success: false });
   }
 });
+
+
 // ✅ CHANGE 3: Naya proxy-iframe endpoint — affiliate URL fetch karke headers strip karo
 // NAYA — yeh daalo
 
